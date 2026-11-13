@@ -1,0 +1,16 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+node_modules/
+target/
+build/
+.gradle/
+.mvn/wrapper/maven-wrapper.jar
+.env
+.env.*
