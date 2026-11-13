@@ -1,0 +1,44 @@
+
+name: Reusable Maven Build
+
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        description: Java version
+        required: false
+        type: string
+        default: '21'
+
+      working-directory:
+        description: Application directory
+        required: false
+        type: string
+        default: 'java-app'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Maven Build and Test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ inputs.java-version }}
+          cache: maven
+          cache-dependency-path: ${{ inputs.working-directory }}/pom.xml
+
+      - name: Build and Test
+        run: mvn --batch-mode clean package
