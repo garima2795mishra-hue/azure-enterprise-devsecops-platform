@@ -73,3 +73,21 @@ jobs:
 
       - name: Dependency Audit
         run: npm audit --audit-level=high
+
+
+  build-validation-gate:
+    name: Build Validation Gate
+    runs-on: ubuntu-latest
+
+    needs:
+      - maven-build
+      - gradle-build
+      - node-build
+
+    if: ${{ success() }}
+
+    steps:
+      - name: Verify Build Results
+        run: echo "All three builds passed successfully."
+
+
