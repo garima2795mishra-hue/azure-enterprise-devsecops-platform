@@ -18,6 +18,58 @@ jobs:
       java-version: '21'
       working-directory: 'java-app'
 
+  
   gradle-build:
     name: Gradle Build
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: java-app
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.7'
+
+      - name: Gradle Build and Test
+        run: gradle clean build
+
+
+  node-build:
+    name: Node.js Validation
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: node-app
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: node-app/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Check JavaScript Syntax
+        run: node --check index.js
+
+      - name: Dependency Audit
+        run: npm audit --audit-level=high
